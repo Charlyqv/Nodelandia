@@ -1,0 +1,79 @@
+services:
+  # 1. Base de datos SQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: mastery_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpassword
+      POSTGRES_DB: nodedb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # 2. Base de datos NoSQL
+  mongodb:
+    image: mongo:6
+    container_name: mastery_mongo
+    restart: always
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodata:/data/db
+
+  # 3. Backend (Node.js API)
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: mastery_api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=admin
+      - DB_PASSWORD=adminpassword
+      - DB_NAME=nodedb
+      - MONGO_URI=mongodb://mongodb:27017/nodedb
+    depends_on:
+      - postgres
+      - mongodb
+
+  # 4. Frontend SPA (Vite/React)
+  client-vite:
+    build:
+      context: ./client-vite
+      dockerfile: Dockerfile
+    container_name: mastery_vite
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client-vite:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+
+  # 5. Frontend SSR (Next.js)
+  client-next:
+    build:
+      context: ./client-next
+      dockerfile: Dockerfile
+    container_name: mastery_next
+    ports:
+      - "3001:3000" # Exponemos en 3001 porque el 3000 ya lo usa la API
+    volumes:
+      - ./client-next:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+volumes:
+  pgdata:
+  mongodata:

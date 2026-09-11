@@ -1,0 +1,25 @@
+# Dependencias
+node_modules/
+npm-debug.log*
+
+# Variables de entorno y secretos
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Logs y archivos de depuración
+logs
+*.log
+pids
+*.pid
+*.seed
+
+# Archivos del sistema operativo (Mac/Windows)
+.DS_Store
+Thumbs.db
+
+# Archivos de cobertura de pruebas (si agregas Jest después)
+coverage/
+.nyc_output/
