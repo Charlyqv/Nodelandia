@@ -29,8 +29,8 @@ connectMongo();
 
 app.use('/api/v1/status', require('./routes/status.routes'));
 app.use('/api/v1/metrics', require('./routes/metrics.routes'));
-
 app.use('/api/v1/auth', require('./routes/auth.routes'));
+app.use('/api/v1/tasks', require('./routes/tasks.routes'));
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Ruta no encontrada' });
