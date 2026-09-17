@@ -1,4 +1,5 @@
 import { useState, useEffect, type FormEvent } from 'react';
+import { apiFetch } from '../utils/api';
 
 // Definimos la estructura de la Tarea basándonos en Postgres
 interface Task {
@@ -21,11 +22,12 @@ export default function TasksBoard() {
   // 1. OBTENER LAS TAREAS (GET)
   const fetchTasks = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/v1/tasks', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      // const res = await fetch('http://localhost:3000/api/v1/tasks', {
+      //   headers: {
+      //     'Authorization': `Bearer ${token}`
+      //   }
+      // });
+      const res = await apiFetch('/tasks');
       if (!res.ok) throw new Error('Error cargando tareas');
       const data = await res.json();
       setTasks(data);
@@ -47,16 +49,20 @@ export default function TasksBoard() {
     if (!newTaskTitle.trim()) return;
 
     try {
-      const res = await fetch('http://localhost:3000/api/v1/tasks', {
+      // const res = await fetch('http://localhost:3000/api/v1/tasks', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${token}`
+      //   },
+      //   body: JSON.stringify({ 
+      //     title: newTaskTitle, 
+      //     description: '' // Opcional por ahora
+      //   })
+      // });
+      const res = await apiFetch('/tasks', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ 
-          title: newTaskTitle, 
-          description: '' // Opcional por ahora
-        })
+        body: JSON.stringify({ title: newTaskTitle, description: '' })
       });
 
       if (res.ok) {
@@ -76,14 +82,15 @@ export default function TasksBoard() {
     setTasks(tasks.map(t => t.id === taskId ? { ...t, is_completed: !currentStatus } : t));
 
     try {
-      await fetch(`http://localhost:3000/api/v1/tasks/${taskId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ is_completed: !currentStatus })
-      });
+      // await fetch(`http://localhost:3000/api/v1/tasks/${taskId}`, {
+      //   method: 'PUT',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${token}`
+      //   },
+      //   body: JSON.stringify({ is_completed: !currentStatus })
+      // });
+      await apiFetch(`/tasks/${taskId}`, { method: 'PUT' });
     } catch (err) {
       console.error("Falló la actualización en el servidor", err);
       // Si falla, podrías revertir el estado aquí
@@ -96,12 +103,13 @@ export default function TasksBoard() {
     setTasks(tasks.filter(t => t.id !== taskId));
 
     try {
-      await fetch(`http://localhost:3000/api/v1/tasks/${taskId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      // await fetch(`http://localhost:3000/api/v1/tasks/${taskId}`, {
+      //   method: 'DELETE',
+      //   headers: {
+      //     'Authorization': `Bearer ${token}`
+      //   }
+      // });
+      await apiFetch(`/tasks/${taskId}`, { method: 'DELETE' });
     } catch (err) {
       console.error("Falló la eliminación", err);
     }

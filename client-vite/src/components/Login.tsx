@@ -10,13 +10,13 @@ export default function Login({ onLoginSuccess }: LoginProps) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
+  // const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
-    setSuccessMessage('');
+    // setSuccessMessage('');
     setLoading(true);
 
     try {
@@ -39,7 +39,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
       // 2. (Opcional) Guardar datos básicos del usuario
       localStorage.setItem('user', JSON.stringify(data.user));
 
-      setSuccessMessage(`¡Bienvenido de nuevo, ${data.user.name}!`);
+      // setSuccessMessage(`¡Bienvenido de nuevo, ${data.user.name}!`);
 
       onLoginSuccess();
       
@@ -61,7 +61,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
       <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#1e293b' }}>Iniciar Sesión</h2>
       
       {error && <div style={{ padding: '0.75rem', marginBottom: '1rem', backgroundColor: '#fef2f2', color: '#dc2626', borderRadius: '4px', border: '1px solid #f87171' }}>{error}</div>}
-      {successMessage && <div style={{ padding: '0.75rem', marginBottom: '1rem', backgroundColor: '#f0fdf4', color: '#16a34a', borderRadius: '4px', border: '1px solid #86efac' }}>{successMessage}</div>}
+      {/* {successMessage && <div style={{ padding: '0.75rem', marginBottom: '1rem', backgroundColor: '#f0fdf4', color: '#16a34a', borderRadius: '4px', border: '1px solid #86efac' }}>{successMessage}</div>} */}
 
       <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <div>
