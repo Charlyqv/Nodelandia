@@ -106,7 +106,7 @@ import Layout from '../components/Layout';
 
 interface MetricData {
   cpuUsage: number;
-  ramUsage: number;
+  memoryUsage: number;
   timestamp: string;
 }
 
@@ -211,7 +211,7 @@ export default function DashboardPage() {
                       <XAxis dataKey="timestamp" hide />
                       <YAxis domain={[0, 100]} axisLine={false} tickLine={false} tick={{fill: '#64748b'}} />
                       <Tooltip />
-                      <Line type="monotone" dataKey="ramUsage" stroke="#3b82f6" strokeWidth={3} dot={false} />
+                      <Line type="monotone" dataKey="memoryUsage" stroke="#3b82f6" strokeWidth={3} dot={false} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -229,10 +229,8 @@ export default function DashboardPage() {
                   </ResponsiveContainer>
                 </div>
               </div>
-
             </div>
           </div>
-          
         </main>
       </div>
     </Layout>
